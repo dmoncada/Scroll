@@ -1,0 +1,34 @@
+name: CI
+
+on:
+  push:
+    branches:
+      - main
+    paths-ignore:
+      - "**.md"
+      - ".gitignore"
+      - ".editorconfig"
+      - ".swift-format"
+  workflow_dispatch:
+
+jobs:
+  build:
+    name: Build (${{ matrix.name }})
+    runs-on: ${{ matrix.runner }}
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - name: macOS 15
+            runner: macos-15
+            xcode: "16.4"
+          - name: macOS 26
+            runner: macos-26
+            xcode: "26.6"
+    steps:
+      - uses: actions/checkout@v4
+      - uses: maxim-lobanov/setup-xcode@v1
+        with:
+          xcode-version: ${{ matrix.xcode }}
+      - run: brew install xcbeautify
+      - run: make build
