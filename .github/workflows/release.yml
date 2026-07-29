@@ -26,6 +26,7 @@ jobs:
 
           version="${GITHUB_REF_NAME#v}"
           derived_data="$RUNNER_TEMP/DerivedData"
+          app="$derived_data/Build/Products/Release/Scroll.app"
           archive="Scroll-${version}.zip"
 
           xcodebuild \
@@ -37,8 +38,10 @@ jobs:
             MARKETING_VERSION="$version" \
             build
 
+          codesign --force --deep --sign - "$app"
+
           ditto -c -k --sequesterRsrc --keepParent \
-            "$derived_data/Build/Products/Release/Scroll.app" \
+            "$app" \
             "$archive"
           shasum -a 256 "$archive" > "$archive.sha256"
 
