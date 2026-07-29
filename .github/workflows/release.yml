@@ -39,10 +39,7 @@ jobs:
             build
 
           codesign --force --deep --sign - "$app"
-
-          ditto -c -k --sequesterRsrc --keepParent \
-            "$app" \
-            "$archive"
+          ditto -c -k --sequesterRsrc --keepParent "$app" "$archive"
           shasum -a 256 "$archive" > "$archive.sha256"
 
       - name: Publish GitHub release

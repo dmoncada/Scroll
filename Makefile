@@ -2,6 +2,7 @@ SWIFT := "/usr/bin/swift"
 
 CONFIGURATION ?= Debug
 
+.PHONY: check
 check:
 	@$(SWIFT) format \
 		lint \
@@ -10,6 +11,7 @@ check:
 		--recursive \
 		.
 
+.PHONY: format
 format:
 	@$(SWIFT) format \
 		--ignore-unparsable-files \
@@ -18,6 +20,7 @@ format:
 		--recursive \
 		.
 
+.PHONY: build
 build:
 	@echo "Building Scroll ($(CONFIGURATION))..."
 	@xcodebuild build \
@@ -28,10 +31,10 @@ build:
 		-destination 'generic/platform=macOS' \
 		| xcbeautify
 
+.PHONY: debug
 debug: CONFIGURATION = Debug
 debug: build
 
+.PHONY: release
 release: CONFIGURATION = Release
 release: build
-
-.PHONY: check format build debug release
